@@ -34,6 +34,11 @@ func mkns(nsType, mntPath string) error {
 		return err
 	}
 	dir, _ := path.Split(mntPath)
+	f, err := os.OpenFile(mntPath, os.O_CREATE|os.O_WRONLY, 0700)
+	if err != nil {
+		return err
+	}
+	f.Close()
 	_ = os.MkdirAll(dir, 0700)
 	if err := syscall.Mount("/proc/self/ns/net", mntPath, "bind", syscall.MS_BIND|syscall.MS_REC, ""); err != nil {
 		return err
